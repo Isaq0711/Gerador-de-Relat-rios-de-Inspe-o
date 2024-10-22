@@ -1,0 +1,135 @@
+from tkinter import Tk, Label, Entry, StringVar, messagebox, filedialog, Button, PhotoImage, Canvas, Scrollbar, Radiobutton, IntVar
+from tkcalendar import DateEntry
+import locale
+from tkinter import ttk  # Biblioteca ttk para usar o tema
+import os
+from PIL import Image, ImageTk
+import json
+from tkinter import Tk, StringVar, messagebox, filedialog, IntVar
+from tkcalendar import DateEntry
+import locale
+from tkinter import ttk  # Biblioteca ttk para usar o tema
+import os
+import json
+from tkinter import Tk, Label, Entry, StringVar, messagebox, filedialog, Button, PhotoImage, Canvas, Scrollbar, Radiobutton, IntVar
+from tkcalendar import DateEntry
+import locale
+from tkinter import ttk  # Biblioteca ttk para usar o tema
+import os
+from PIL import Image, ImageTk
+import json
+
+# Define a localidade para português
+locale.setlocale(locale.LC_TIME, 'pt_BR.UTF-8')
+
+def abrir_interface(callback):
+    # Carregar estações do arquivo JSON
+    with open('estações.json', 'r',encoding='utf-8') as f:
+        estacoes_por_concessionaria = json.load(f)
+
+    # Janela principal
+    root = Tk()
+    root.title("Gerador de Relatório Técnico")
+
+    big_frame = ttk.Frame(root)
+    big_frame.grid(row=0, column=0, padx=20, pady=20)  # Usando grid para o frame
+
+    # Definir o tema Azure
+    root.tk.call("source", os.path.join("Azure-ttk-theme-main", "azure.tcl"))  # Carregar o tema a partir do arquivo TCL
+    root.tk.call("set_theme", "dark")
+
+    # Variáveis para armazenar os valores
+    concessionaria_var = StringVar(root)
+    concessionaria_var.set("Selecionar concessionária")  # valor padrão
+
+    estacao_var = StringVar(root)
+    data_var = StringVar(root)
+    horario_var = StringVar(root)
+    tipo_local_var = StringVar(root)
+
+    # Variável para armazenar a seleção da estação
+    estacao_selecionada = IntVar()
+
+    # Função para atualizar as estações com base na concessionária selecionada
+    def update_estacoes():
+        concessionaria = concessionaria_var.get()
+        estacoes = estacoes_por_concessionaria.get(concessionaria, [])
+
+        # Limpar canvas antes de adicionar novas estações
+        for widget in estacoes_frame.winfo_children():
+            widget.destroy()
+
+        # Adicionar radiobuttons para as estações da concessionária, se houver
+        if concessionaria in ["Supervia", "MetrôRio", "CCR Barcas"]:
+            # Exibir estações e scrollbar
+            for i, estacao in enumerate(estacoes):
+                radiobutton = Radiobutton(estacoes_frame, text=estacao, variable=estacao_selecionada, value=i)
+                radiobutton.pack(side='left', padx=10)
+
+            canvas.update_idletasks()
+            canvas.config(scrollregion=canvas.bbox("all"))
+            canvas.grid(row=1, column=1, padx=5, pady=5)
+            scrollbar.grid(row=2, column=1, sticky="ew")
+        else:
+            # Ocultar estações e scrollbar
+            canvas.grid_forget()
+            scrollbar.grid_forget()
+
+    # Função para selecionar imagens
+    def selecionar_imagens():
+        arquivos = filedialog.askopenfilenames(title="Selecionar Imagens", filetypes=[("Imagens", "*.png;*.jpg;*.jpeg")])
+        # lógica para selecionar imagens...
+
+    # Concessionária
+    ttk.Label(big_frame, text="Concessionária:").grid(row=0, column=0, padx=5, pady=5)
+    ttk.OptionMenu(big_frame, concessionaria_var, "Selecionar concessionária", *estacoes_por_concessionaria.keys(), command=lambda _: update_estacoes()).grid(row=0, column=1, padx=5, pady=5)
+
+    # Estação/Terminal
+    ttk.Label(big_frame, text="Estação:").grid(row=1, column=0, padx=5, pady=5)
+
+    # Canvas para lista horizontal de estações com scrollbar
+    canvas = Canvas(big_frame, height=40)
+    scrollbar = Scrollbar(big_frame, orient='horizontal', command=canvas.xview)
+    estacoes_frame = ttk.Frame(canvas)
+    
+    estacoes_frame.bind("<Configure>", lambda e: canvas.config(scrollregion=canvas.bbox("all")))
+    canvas.create_window((0, 0), window=estacoes_frame, anchor="nw")
+    canvas.config(xscrollcommand=scrollbar.set)
+
+    canvas.grid(row=1, column=1, padx=5, pady=5)
+    scrollbar.grid(row=2, column=1, sticky="ew")
+    canvas.grid_forget()
+    scrollbar.grid_forget()
+
+    # Botão para selecionar imagens
+    ttk.Button(big_frame, text="Selecionar Imagens", command=selecionar_imagens).grid(row=5, column=1, pady=10)
+
+    def on_generate():
+        concessionaria = concessionaria_var.get()
+        estacao_index = estacao_selecionada.get()
+        estacao = estacoes_por_concessionaria[concessionaria][estacao_index] if estacoes_por_concessionaria[concessionaria] else ""
+        data = data_entry.get_date().strftime('%d de %B de %Y')
+        horario = horario_var.get()
+        
+        # Verificação dos campos
+        if concessionaria == "Selecionar concessionária" or not estacao or not data or not horario:
+            messagebox.showwarning("Aviso", "Preencha todos os campos antes de continuar.")
+            return
+
+        callback(concessionaria, estacao, data, horario)
+        root.destroy()
+
+    # Data da Vistoria
+    ttk.Label(big_frame, text="Data da Vistoria:").grid(row=3, column=0, padx=5, pady=5)
+    data_entry = DateEntry(big_frame, textvariable=data_var, date_pattern='dd/MM/yyyy', width=30)
+    data_entry.grid(row=3, column=1, padx=5, pady=5)
+
+    # Horário da Vistoria
+    ttk.Label(big_frame, text="Horário da Vistoria (XhYmin):").grid(row=4, column=0, padx=5, pady=5)
+    horario_entry = Entry(big_frame, width=30, textvariable=horario_var)
+    horario_entry.grid(row=4, column=1, padx=5, pady=5)
+
+    # Botão para gerar o relatório
+    ttk.Button(big_frame, text="Gerar Relatório", command=on_generate).grid(row=6, column=1, pady=20)
+
+    root.mainloop()
