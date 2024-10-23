@@ -12,7 +12,6 @@ import locale
 from docx.enum.section import WD_SECTION
 from docx.shared import Cm
 from datetime import datetime
-
 from interface import abrir_interface
 import os
 

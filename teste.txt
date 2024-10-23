@@ -9,15 +9,7 @@ from tkinter import Tk, StringVar, messagebox, filedialog, IntVar
 from tkcalendar import DateEntry
 import locale
 from tkinter import ttk  # Biblioteca ttk para usar o tema
-import os
-import json
-from tkinter import Tk, Label, Entry, StringVar, messagebox, filedialog, Button, PhotoImage, Canvas, Scrollbar, Radiobutton, IntVar
-from tkcalendar import DateEntry
-import locale
-from tkinter import ttk  # Biblioteca ttk para usar o tema
-import os
-from PIL import Image, ImageTk
-import json
+
 
 # Define a localidade para português
 locale.setlocale(locale.LC_TIME, 'pt_BR.UTF-8')

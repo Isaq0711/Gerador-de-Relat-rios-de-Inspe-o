@@ -1,22 +1,15 @@
-from tkinter import Tk, Label, Entry, StringVar, messagebox, filedialog, Button, PhotoImage, Canvas, Scrollbar, Radiobutton, IntVar
+
+from tkinter import Tk, Label, Entry, StringVar, messagebox, filedialog, Button, PhotoImage
 from tkcalendar import DateEntry
 import locale
 from tkinter import ttk  # Biblioteca ttk para usar o tema
 import os
 from PIL import Image, ImageTk
-import json
-from tkinter import Tk, StringVar, messagebox, filedialog, IntVar
-from tkcalendar import DateEntry
-import locale
 
 # Define a localidade para português
 locale.setlocale(locale.LC_TIME, 'pt_BR.UTF-8')
 
 def abrir_interface(callback):
-
-    with open('estações.json', 'r',encoding='utf-8') as f:
-        estacoes_por_concessionaria = json.load(f)
-
     # Janela principal
     root = Tk()
     root.title("Gerador de Relatório Técnico")
