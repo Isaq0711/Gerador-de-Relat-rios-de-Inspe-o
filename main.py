@@ -18,7 +18,7 @@ import os
 
 
 # Função para criar o documento com as informações fornecidas
-def gerar_documento(concessionaria, estacao, tipo_local, data, horário, imagens, legendas):
+def gerar_documento(concessionaria, estacao, tipo_local, data, horário, imagens, legendas, lista_assinaturas ):
     document = Document()
 
     # Configurações da página
@@ -251,10 +251,23 @@ def gerar_documento(concessionaria, estacao, tipo_local, data, horário, imagens
     document.add_paragraph('')
     document.add_paragraph(f'Em {data_atual},\n')
 
-    #document.add_paragraph('Isaque da Cunha Soares\nEstagiário da Câmara de Transportes e Rodovias')
-    #document.add_paragraph('João Gabriel Lopes Zarur\nAgente de Fiscalização da Câmara de Transportes e Rodovias')
-    #document.add_paragraph('Rafael Lanunci da Silva Teixeira Poubel\nGerente da Câmara de Transportes e Rodovias')
+    # Criar tabela para as assinaturas
+    assinaturas_table = document.add_table(rows=len(lista_assinaturas) // 2 + 1, cols=2)
+    assinaturas_table.alignment = WD_ALIGN_PARAGRAPH.CENTER
 
+    for i, (nome, cargo) in enumerate(lista_assinaturas):
+        row = assinaturas_table.add_row().cells
+        cell = row[i % 2]
+        cell_paragraph = cell.paragraphs[0]
+        run_nome = cell_paragraph.add_run(nome)
+        run_nome.bold = True
+        run_nome.italic = True
+        cell_paragraph.add_run("\n" + cargo)
+
+    # Alinhamento das células
+    for row in assinaturas_table.rows:
+        for cell in row.cells:
+            cell.paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.CENTER
     # Salvando o documento
     document.save(f'Relatorio_Fiscalizacao_{estacao}.docx')
 

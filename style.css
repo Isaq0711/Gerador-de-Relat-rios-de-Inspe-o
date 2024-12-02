@@ -1,0 +1,126 @@
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #222;
+    color: #eee;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    background-color: #333;
+    padding: 20px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 900px; /* Tamanho máximo para o contêiner */
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 0 auto;
+}
+
+.modal {
+    display: none; /* O modal começa escondido */
+    position: fixed;
+    z-index: 999; /* Fica sobre os outros elementos */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8); /* Fundo semitransparente */
+    justify-content: center;
+    align-items: center;
+}
+
+/* Estilo da imagem no modal */
+.modal-content {
+    max-width: 80%;
+    max-height: 80%;
+    object-fit: contain; /* A imagem será ajustada dentro do modal */
+}
+
+/* Estilo do botão de fechar */
+.close {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: white;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+label, select, input, button {
+    width: 100%;
+}
+
+button {
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+
+
+
+.imagemContainer {
+    display: flex;
+    flex-wrap: wrap;
+    width: calc(25% - 10px); /* Cada imagem ocupa 1/3 da largura da linha */
+    box-sizing: border-box;
+    text-align: center;
+    justify-content: center;
+    
+    position: relative;
+    margin-bottom: 10px; /* Espaçamento entre as linhas */
+}
+
+.imagemContainer img {
+    width: 100%; /* A imagem ocupa toda a largura do seu contêiner */
+    height: 150px; /* Todas as imagens têm a mesma altura */
+    object-fit: cover; /* A imagem vai cobrir o espaço sem distorcer */
+    border-radius: 8px; /* Bordas arredondadas */
+}
+.imagemContainer button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 2px; /* Menos padding para reduzir o tamanho */
+    width: 20px; /* Definindo uma largura fixa */
+    height: 20px; /* Definindo uma altura fixa para o botão */
+    border-radius: 50%; /* Tornando o botão circular */
+    font-size: 12px; /* Menor fonte */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+.imagemContainer input {
+    margin-top: 5px;
+    width: 100%;
+    padding: 5px;
+    background-color: #222;
+    color: #eee;
+    border: none;
+    border-radius: 4px;
+}
+
+#imagensContainer .imagemContainer:nth-child(3n) {
+    margin-right: 0; /* Remove o margin-right após a terceira imagem na linha */
+}
+

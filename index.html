@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Relatório Técnico</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Gerador de Relatório Técnico</h1>
+
+        <!-- Concessionária -->
+        <label for="concessionaria">Concessionária:</label>
+        <select id="concessionaria" onchange="updateTipoLocal()">
+            <option value="Selecionar">Selecionar concessionária</option>
+            <option value="Supervia">Supervia</option>
+            <option value="MetrôRio">MetrôRio</option>
+            <option value="CCR Barcas">CCR Barcas</option>
+            <option value="Rota 116">Rota 116</option>
+            <option value="CCR Via Lagos">CCR Via Lagos</option>
+        </select>
+
+        <!-- Data da Vistoria -->
+        <label for="dataVistoria">Data da Vistoria:</label>
+        <input type="date" id="dataVistoria">
+
+        <!-- Horário da Vistoria -->
+        <label for="horarioVistoria">Horário da Vistoria (XhYmin):</label>
+        <input type="text" id="horarioVistoria" placeholder="Ex: 14h30min">
+
+        <!-- Estações Inspecionadas -->
+        <label id="tipoLocalLabel" for="numEstacoes">Número de Estações Inspecionadas:</label>
+        <input type="number" id="numEstacoes" min="1" max="10" onchange="gerarComponentesEstacoes()">
+        
+        <div id="estacoesContainer"></div>
+
+
+        <!-- Input oculto para selecionar arquivos do computador -->
+        <input type="file" id="inputImagens" accept="image/*" multiple onchange="selecionarImagens()" style="display: none;">
+        
+        <!-- Container para exibir as imagens selecionadas -->
+        <div id="modal" class="modal">
+            <span class="close" onclick="fecharModal()">&times;</span>
+            <img id="imagemModal" class="modal-content" />
+            <div id="caption"></div>
+        </div>
+        <div id="imagemContainer"></div>
+        
+        <!-- Botão para gerar o relatório -->
+        <button onclick="onGenerate()">Gerar Relatório</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
